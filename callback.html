@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>VK Redirect</title>
+</head>
+<body>
+  <h2>Авторизация прошла</h2>
+  <p id="output">Ожидаем код...</p>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (code) {
+      document.getElementById("output").innerText = `Код авторизации: ${code}`;
+
+      // Здесь можно отправить его в десктоп-приложение (например, через fetch)
+      // fetch("http://localhost:5000/receive", { method: "POST", body: code });
+
+    } else {
+      document.getElementById("output").innerText = "Код не найден.";
+    }
+  </script>
+</body>
+</html>
