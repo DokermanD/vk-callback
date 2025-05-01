@@ -1,32 +1,44 @@
-<script>
-  window.addEventListener('load', () => {
-    const VKID = window.VKIDSDK;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>VK Auth</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/@vkid/sdk@2.5.2/dist/index.umd.js"></script>
+</head>
+<body>
+  <h2>Войти через VK ID</h2>
+  <div id="vk_id_button"></div>
 
-    if (!VKID || !VKID.Config) {
-      console.error("VKID SDK не загружен");
-      return;
-    }
+  <script>
+    window.addEventListener('load', () => {
+      const VKID = window.VKIDSDK;
 
-    VKID.Config.init({
-      app: 53500616,
-      redirectUrl: 'https://DokermanD.github.io/vk-callback/callback.html',
-      responseMode: VKID.ConfigResponseMode.Code,
-      source: VKID.ConfigSource.LOWCODE,
-      scope: '',
-    });
+      if (!VKID || !VKID.Config) {
+        console.error("❌ VKID SDK не загружен");
+        return;
+      }
 
-    const oneTap = new VKID.OneTap();
+      // Инициализация VK ID SDK
+      VKID.Config.init({
+        app: 53500616,
+        redirectUri: 'https://DokermanD.github.io/vk-callback/callback.html',
+        responseMode: VKID.ConfigResponseMode.Code,
+        source: VKID.ConfigSource.LOWCODE,
+        scope: '', // можно указать friends,email и т.д.
+      });
 
-    oneTap.render({
-      container: document.getElementById('vk_id_button'),
-      showAlternativeLogin: true
-    });
+      const oneTap = new VKID.OneTap();
 
-    oneTap
+      oneTap.render({
+        container: document.getElementById('vk_id_button'),
+        showAlternativeLogin: true
+      })
       .on(VKID.WidgetEvents.ERROR, console.error)
       .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, (payload) => {
         const code = payload.code;
-        alert("Получен code: " + code);
+        alert("✅ Получен код авторизации: " + code);
       });
-  });
-</script>
+    });
+  </script>
+</body>
+</html>
