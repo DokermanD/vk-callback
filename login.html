@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>VK Login</title>
+    <script src="https://unpkg.com/@vkid/sdk@3.0.0/dist/sdk/umd/index.js"></script>
+</head>
+<body>
+  <h2>Войти через VK ID</h2>
+
+  <div id="vk_login_btn"></div>
+
+  <script type="text/javascript">
+    if ('VKIDSDK' in window) {
+      const VKID = window.VKIDSDK;
+
+      VKID.Config.init({
+        app: 53500616,
+        redirectUri: 'https://DokermanD.github.io/vk-callback/callback.html',
+        responseMode: VKID.ConfigResponseMode.Callback,
+        source: VKID.ConfigSource.LOWCODE,
+        scope: '' // можно указать: friends,email и т.д.
+      });
+
+      const oneTap = new VKID.OneTap();
+
+      oneTap.render({
+        container: document.getElementById("vk_login_btn"),
+        showAlternativeLogin: true
+      })
+      .on(VKID.WidgetEvents.ERROR, vkidOnError)
+      .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function (payload) {
+        const code = payload.code;
+        const deviceId = payload.device_id;
+
+        // Теперь отправляем `code` и `deviceId` в локальное приложение
+        fetch("http://localhost:5000/receive", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ code, deviceId })
+        })
+        .then(() => alert("Код отправлен!"))
+        .catch(err => console.error("Ошибка отправки:", err));
+      });
+    }
+
+    function vkidOnError(error) {
+      console.error("VKID ошибка:", error);
+    }
+  </script>
+</body>
+</html>
