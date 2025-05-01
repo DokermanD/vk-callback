@@ -13,17 +13,17 @@
     window.addEventListener('load', () => {
       const VKID = window.VKIDSDK;
 
-      if (!VKID || !VKID.Config) {
+      if (!VKID || !VKID.Config || !VKID.Config.init) {
         console.error("❌ VKID SDK не загружен");
         return;
       }
 
       VKID.Config.init({
         app: 53500616,
-        redirectUri: 'https://DokermanD.github.io/vk-callback/callback.html',
+        redirectUri: 'https://dokermand.github.io/vk-callback/callback.html',
         responseMode: VKID.ConfigResponseMode.Code,
         source: VKID.ConfigSource.LOWCODE,
-        scope: '',
+        scope: ''
       });
 
       const oneTap = new VKID.OneTap();
